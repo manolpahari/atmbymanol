@@ -33,7 +33,7 @@ export const Tab = ({
       />
       <div
         role="tabpanel"
-        className="tab-content bg-base-100 border-base-300 rounded-box p-6"
+        className="tab-content bg-purple-900 border-base-300 rounded-box p-6"
       >
         {children}
       </div>
