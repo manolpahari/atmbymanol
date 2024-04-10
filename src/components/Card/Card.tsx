@@ -25,7 +25,7 @@ const Card = ({
         </figure>
       )}
       <div className="card-body items-center text-center">
-        <h2 className="card-title text-2xl font-bold">{title}</h2>
+        <h2 className="card-title md:text-2xl text:xl font-bold">{title}</h2>
         {description && <p>{description}</p>}
         <div className="card-actions">
           {buttonName && (

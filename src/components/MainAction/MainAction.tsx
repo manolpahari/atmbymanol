@@ -4,7 +4,7 @@ import Card from '../Card/Card';
 
 const MainAction = () => {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between gap-4">
       {/* Enter Deposit */}
       <Card
         title="Deposit"
@@ -13,7 +13,7 @@ const MainAction = () => {
       />
       {/* Enter Withdraw */}
       <Card
-        title="Withdraw"
+        title="Withdrawal"
         onClick={() => console.log('take me to withdraw route')}
         buttonName="Cash Out"
       />
