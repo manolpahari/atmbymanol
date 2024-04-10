@@ -1,10 +1,10 @@
-import Dashboard from './Page/Dashboard/Dashboard';
+import Login from '@/components/Login/Login';
 
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-between">
-      {/* Dashboard */}
-      <Dashboard />
+      {/* Login */}
+      <Login />
     </main>
   );
 }
