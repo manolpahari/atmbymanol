@@ -14,7 +14,7 @@ const Card = ({
   onClick: () => void;
 }) => {
   return (
-    <div className="card w-96 bg-primary shadow-xl text-gray-800">
+    <div className="card w-96 bg-neutral shadow-xl text-gray-800">
       {image && (
         <figure className="px-10 pt-10">
           <img

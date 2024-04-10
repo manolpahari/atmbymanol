@@ -1,5 +1,5 @@
 'use client';
-import React, { Children, useCallback, useState, useTransition } from 'react';
+import React, { useCallback, useState, useTransition } from 'react';
 
 type TabsContainerProps = {
   tabName: string;
@@ -26,14 +26,15 @@ export const Tab = ({
         type="radio"
         name="my_tabs_2"
         role="tab"
-        className="tab [--tab-bg:indigo] [--tab-border-color:white] text-primary"
+        className="tab [--tab-bg:#3b8ac4]  text-primary"
         aria-label={`${tabName}`}
         checked={isActive ? true : false}
         onClick={onClick}
+        readOnly
       />
       <div
         role="tabpanel"
-        className="tab-content bg-purple-900 border-base-300 rounded-box p-6"
+        className="tab-content bg-neutral border-base-300 rounded-box p-6"
       >
         {children}
       </div>
@@ -49,8 +50,6 @@ export default function TabContainer({
   const sortedTabsAsc = tabDetails?.sort((a, b) => a.order - b.order); //sort tabs by order number
   const [isPending, startTransition] = useTransition();
   const [tab, setTab] = useState<TabsContainerProps>(sortedTabsAsc[0]); //set the first tab as default
-
-  console.log({ tab });
 
   const selectTab = useCallback((nextTab: TabsContainerProps) => {
     startTransition(() => {

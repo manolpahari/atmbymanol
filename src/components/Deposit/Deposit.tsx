@@ -31,7 +31,7 @@ const Deposits = memo(function deposits({
             const depositsDate = new Date(data?.depositsDate);
             const depositsAmount = data?.amount;
             return (
-              <tr>
+              <tr key={data.id}>
                 <th>{serialNum}</th>
                 <td>{depositsDate?.toLocaleDateString()}</td>
                 <td>${depositsAmount}</td>

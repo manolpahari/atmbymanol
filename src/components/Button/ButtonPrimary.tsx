@@ -1,16 +1,23 @@
 'use client';
-import React from 'react';
+import React, { ButtonHTMLAttributes, HTMLAttributes } from 'react';
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  buttonName: string;
+  onClick: () => void;
+}
 
 const ButtonPrimary = ({
   buttonName,
   onClick,
-}: {
-  buttonName: string;
-  onClick: () => void;
-}) => {
+  ...restButtonProps
+}: ButtonProps) => {
   return (
     <div>
-      <button className="btn bg-purple-900" onClick={onClick}>
+      <button
+        className="btn bg-secondary"
+        onClick={onClick}
+        {...restButtonProps}
+      >
         {buttonName}
       </button>
     </div>
