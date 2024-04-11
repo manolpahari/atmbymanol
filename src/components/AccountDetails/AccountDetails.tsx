@@ -1,18 +1,12 @@
+import { Account } from '@prisma/client';
 import { memo } from 'react';
 
-interface DepositsDTO {
-  id: string;
-  amount: number;
-  depositsCount: number;
-  depositsDate: string;
-}
-
-const Deposits = memo(function deposits({
-  depositsData,
+const AccountDetails = memo(function deposits({
+  accountData,
 }: {
-  depositsData: DepositsDTO[];
+  accountData: Account[];
 }) {
-  if (depositsData && depositsData?.length === 0) {
+  if (accountData && accountData?.length === 0) {
     <p>Data Not Available!</p>;
   }
   return (
@@ -26,9 +20,9 @@ const Deposits = memo(function deposits({
           </tr>
         </thead>
         <tbody>
-          {depositsData?.map((data, index) => {
+          {accountData?.map((data, index) => {
             const serialNum = index + 1;
-            const depositsDate = new Date(data?.depositsDate);
+            const depositsDate = new Date(data?.updatedAT);
             const depositsAmount = data?.amount;
             return (
               <tr key={data.id}>
@@ -44,4 +38,4 @@ const Deposits = memo(function deposits({
   );
 });
 
-export default Deposits;
+export default AccountDetails;

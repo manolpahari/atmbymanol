@@ -1,53 +1,22 @@
 import React from 'react';
 import TabContainer from '../Tabs/Tabs';
-import Deposits from '../Deposit/Deposit';
-import Withdraws from '../Withdraw/Withdraw';
+import AccountDetails from '../AccountDetails/AccountDetails';
+import { fetchAccounts } from '@/app/db/queries/account';
 
-const TabsList = () => {
+
+const TabsList = async () => {
+
+  const accounts = await fetchAccounts() // Fetching the accounts from the database.
+  
   return (
     <TabContainer
       tabDetails={[
         {
-          tabName: 'Deposits',
+          tabName: 'All Transactions',
           order: 1,
           children: (
-            <Deposits
-              depositsData={[
-                {
-                  amount: 20,
-                  depositsDate: new Date().toLocaleString(),
-                  id: crypto.randomUUID() as string,
-                  depositsCount: 0,
-                },
-                {
-                  amount: 10,
-                  depositsDate: new Date().toLocaleString(),
-                  id: crypto.randomUUID() as string,
-                  depositsCount: 1,
-                },
-              ]}
-            />
-          ),
-        },
-        {
-          tabName: 'Withdrawals',
-          order: 2,
-          children: (
-            <Withdraws
-              withDrawsData={[
-                {
-                  amount: 5,
-                  withdrawsDate: new Date().toLocaleString(),
-                  id: crypto.randomUUID() as string,
-                  withdrawsCount: 1,
-                },
-                {
-                  amount: 15,
-                  withdrawsDate: new Date().toLocaleString(),
-                  id: crypto.randomUUID() as string,
-                  withdrawsCount: 2,
-                },
-              ]}
+            <AccountDetails
+              accountData={[...accounts]}
             />
           ),
         },

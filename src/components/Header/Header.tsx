@@ -1,18 +1,16 @@
 import React from 'react';
 
 const Header = ({
-  firstName,
-  lastName,
+  name,
   accountType,
 }: {
-  firstName: string;
-  lastName: string;
-  accountType: string;
+  name: string | undefined;
+  accountType: string | undefined;
 }) => {
   return (
     <div className="flex justify-between md:text-xl text-lg">
       <h1>
-        Welcome: {firstName} {lastName}{' '}
+        Welcome: {name}
       </h1>
       <h1>Account: {accountType}</h1>
     </div>
