@@ -2,6 +2,7 @@
 import React, { useRef, useState } from 'react';
 import ButtonPrimary from '../Button/ButtonPrimary';
 import { useRouter } from 'next/navigation';
+import { Account } from '@prisma/client';
 
 const Login = () => {
 
@@ -15,14 +16,15 @@ const Login = () => {
   const handleButtonClick = async () => {
     const accountNumber = accountNumberInputRef?.current?.value;
     if(accountNumber) {
-      const request = await fetch(`/api/withdraw/${accountNumber}`);
-      const account = await request.json()
-      console.log(account)
+      const request = await fetch(`/api/account/${accountNumber}`);
+      const account: Account  = await request.json()
       if(!account) {
         return setErrorMessage('Account not found, please enter valid account number!')
       }
       //route the user to the dashboard
-      return router.push('/dashboard')
+      
+      
+      return router.push(`/dashboard/${account.id}`)
 
     }else {
      return  setErrorMessage('Account number is required to proceed!')

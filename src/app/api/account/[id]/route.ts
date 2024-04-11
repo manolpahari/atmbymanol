@@ -7,7 +7,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     const accountNumber = Number(params.id);
    const accountDetails = await fetchAccountByAccountNumber(accountNumber)
    if(accountDetails) {
-       return NextResponse.json({ data: accountDetails})
+       return NextResponse.json({ ...accountDetails })
    }
    } catch (error) {
     return  NextResponse.json(null)

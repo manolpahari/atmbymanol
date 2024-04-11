@@ -3,10 +3,10 @@ import MainAction from '@/components/MainAction/MainAction';
 import Spacing from '@/components/Spacing/Spacing';
 import TabsList from '@/components/TabsList/TabsList';
 import React from 'react';
-import { fetchAccountByAccountNumber } from '../db/queries/account';
+import {  fetchAccountById } from '../../db/queries/account';
 
-async function Page() {
-  const account = await fetchAccountByAccountNumber(1)
+async function Page({ params }: { params: { id: string } }) {
+  const account = await fetchAccountById((params?.id))
   return (
     <section className="flex flex-col items-center justify-between">
       <div className="max-w-5xl w-full items-center justify-between">

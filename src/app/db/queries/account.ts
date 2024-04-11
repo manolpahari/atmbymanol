@@ -26,3 +26,17 @@ export async function fetchAccountByAccountNumber(accountNumber: number): Promis
 
     return account
 }
+
+export async function fetchAccountById(id: string): Promise<Account | null> { // Function to fetch a single account by its ID.
+    const account = await prisma.account.findFirst({
+        where: {
+            id
+        }
+    })
+
+    if (!account) {
+        notFound() // If the account is not found, a 404 error is thrown.
+    }
+
+    return account
+}
