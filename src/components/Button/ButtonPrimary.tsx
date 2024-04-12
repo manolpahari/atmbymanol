@@ -3,7 +3,7 @@ import React, { ButtonHTMLAttributes, HTMLAttributes } from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   buttonName: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const ButtonPrimary = ({

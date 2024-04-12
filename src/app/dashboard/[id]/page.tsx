@@ -5,7 +5,9 @@ import TabsList from '@/components/TabsList/TabsList';
 import React from 'react';
 import {  fetchAccountById } from '../../db/queries/account';
 
-async function Page({ params }: { params: { id: string } }) {
+export type PageParams =  {params: { id: string }}
+
+async function Page({ params }:  PageParams) {
   const account = await fetchAccountById((params?.id))
   return (
     <section className="flex flex-col items-center justify-between">
