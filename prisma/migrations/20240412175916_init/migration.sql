@@ -8,6 +8,8 @@ CREATE TABLE "Account" (
     "creditLimit" INTEGER NOT NULL DEFAULT 0,
     "createdAT" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAT" TIMESTAMP(3) NOT NULL,
+    "depositAmount" INTEGER NOT NULL DEFAULT 0,
+    "withDrawalAmount" INTEGER NOT NULL DEFAULT 0,
     "transType" TEXT,
     "transCount" INTEGER,
 

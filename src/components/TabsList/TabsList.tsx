@@ -1,24 +1,17 @@
-import React from 'react';
-import TabContainer from '../Tabs/Tabs';
-import AccountDetails from '../AccountDetails/AccountDetails';
-import { fetchAccounts } from '@/app/db/queries/account';
+import React from "react";
+import TabContainer from "../Tabs/Tabs";
+import AccountDetails from "../AccountDetails/AccountDetails";
+import { fetchAccountById, fetchAccounts } from "@/app/db/queries/account";
+import { PageParams } from "@/app/dashboard/[id]/page";
 
-
-const TabsList = async () => {
-
-  const accounts = await fetchAccounts() // Fetching the accounts from the database.
-  
+const TabsList = async ({ params }: PageParams) => {
   return (
     <TabContainer
       tabDetails={[
         {
-          tabName: 'All Transactions',
+          tabName: "Account Details",
           order: 1,
-          children: (
-            <AccountDetails
-              accountData={[...accounts]}
-            />
-          ),
+          children: <AccountDetails id={params?.id} />,
         },
       ]}
     />

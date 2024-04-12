@@ -1,14 +1,13 @@
-import { Account } from '@prisma/client';
-import { memo } from 'react';
+import { PageParams } from "@/app/dashboard/[id]/page";
+import { fetchAccountById } from "@/app/db/queries/account";
 
-const AccountDetails = memo(function deposits({
-  accountData,
-}: {
-  accountData: Account[];
-}) {
-  if (accountData && accountData?.length === 0) {
-    <p>Data Not Available!</p>;
-  }
+const AccountDetails = async ({ id }: { id: string }) => {
+  const accountData = await fetchAccountById(id); //fetch from db
+
+  const serialNum = 1;
+  const dateCreated = accountData?.createdAT;
+  const creditAmount =
+    accountData?.accountType === "credit" ? accountData?.amount : 0;
   return (
     <div className="overflow-x-auto">
       <table className="table table-xs">
@@ -16,26 +15,19 @@ const AccountDetails = memo(function deposits({
           <tr>
             <th></th>
             <th>Date</th>
-            <th>Amount</th>
+            <th>Balance</th>
           </tr>
         </thead>
         <tbody>
-          {accountData?.map((data, index) => {
-            const serialNum = index + 1;
-            const depositsDate = new Date(data?.updatedAT);
-            const depositsAmount = data?.amount;
-            return (
-              <tr key={data.id}>
-                <th>{serialNum}</th>
-                <td>{depositsDate?.toLocaleDateString()}</td>
-                <td>${depositsAmount}</td>
-              </tr>
-            );
-          })}
+          <tr>
+            <th>{serialNum}</th>
+            <td>{dateCreated?.toLocaleDateString()}</td>
+            <td>${creditAmount}</td>
+          </tr>
         </tbody>
       </table>
     </div>
   );
-});
+};
 
 export default AccountDetails;

@@ -2,13 +2,35 @@
 import ButtonPrimary from '@/components/Button/ButtonPrimary';
 import Spacing from '@/components/Spacing/Spacing';
 import { PageParams } from '../page';
-import { useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
+import {  getAccountData } from '@/app/utils/appFunctions';
+
+type ErrorType = {
+  message: string;
+  status: number
+}
 
 function Page({ params }: PageParams) {
-  // const amountRef = useRef<HTMLInputElement>(null)
+
   const [amount, setAmount] = useState('0')
 
-  const handleShortcuts = (amount: number) => {
+  const handleDepositValidation = async (amount: number, id: string) => {
+    let isValid = false;
+    const account = await getAccountData(`/api/deposit/${id}`)
+    const remainingBalance = amount + account?.amount;
+
+    //check if the deposit amount is more than daily limit(1000) when account type is not credit
+    if (account?.accountType !== 'credit' && amount > 1000) {
+      throw {message: 'Maximum deposit allowed in a day is $1000', status: 422}
+    } else if(account?.accountType === 'credit' && remainingBalance > 0) { //can't deposit more then negative credit balance
+      throw {message: `You only have ${account.amount} on your credit balance`, status: 422}
+    } else {
+      isValid = true;
+    }
+    return isValid;
+  }
+
+  const handleShortcuts = useCallback((amount: number) => {
     if(amount) {
       setAmount((prevAmount) => {
         const existingAmount = Number(prevAmount)
@@ -17,27 +39,37 @@ function Page({ params }: PageParams) {
       }) 
     }
     return;
-  }
+  }, [])
 
   const handleDeposit = async () => {
-    console.log(amount)
-    if(amount !== '0') {
-      // clear the input
-      setAmount('');
-    //  const fromData = formDataPrepForSubmission([{ key: 'amount', value: amount}])
-      let formData = new FormData()
-      formData.append('amount', (amount))
-      console.log(formData.get('amount'))
-      // fetch post request
-      const req = await fetch(`/api/account/${params.id}`,
-    {
-        body: formData,
-        method: "post"
-    })
-    const total = await req.json()
-    console.log({ total })
+    try {
+      if(amount && amount !== '0') {
+        // clear the input
+        setAmount('');
+        let formData = new FormData()
+        formData.append('amount', (amount))
+        console.log(formData.get('amount'))
+        const isInputValid = await handleDepositValidation(Number(amount), params.id)
+        if(isInputValid) {
+  
+          // fetch post request
+          const req = await fetch(`/api/deposit/${params.id}`,
+        {
+            body: formData,
+            method: "post"
+        })
+        const total = await req.json()
+        console.log({ total })
+      }
     }
+      
+    } catch (error: unknown) {
+      const knownError = error as ErrorType
+      alert(knownError.message)
+    }
+   
   }
+
   return (
     <section className="flex flex-col items-center ">
       <div className="max-w-5xl items-center justify-center">
@@ -81,7 +113,7 @@ function Page({ params }: PageParams) {
                 type="text"
                 name="depositAmount"
                 placeholder="$0"
-                maxLength={4}
+                maxLength={10}
                 value={amount !== '0' ? amount : '' }
                 onChange={(e) => setAmount(e.currentTarget.value)}
               />

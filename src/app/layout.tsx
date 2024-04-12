@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Red_Hat_Mono } from 'next/font/google';
 import './globals.css';
 
+
 const inter = Red_Hat_Mono({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
