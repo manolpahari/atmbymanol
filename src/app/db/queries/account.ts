@@ -103,3 +103,20 @@ export async function updateWithdrawal({
     return accountDetails;
   }
 }
+
+export const resetWithDrawAmount = async (id: string) => {
+  try {
+    const req = await fetch(`/api/account/${id}`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const account: Account = await req.json();
+    if (account?.id) {
+    }
+  } catch (error) {
+    // throw { message: "Unable to reset withdrawal Amount", status: 500 };
+    console.log({ error });
+  }
+};

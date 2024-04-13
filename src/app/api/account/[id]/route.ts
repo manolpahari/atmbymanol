@@ -1,5 +1,6 @@
 import { PageParams } from "@/app/dashboard/[id]/page";
 import { fetchAccountByAccountNumber } from "@/app/db/queries/account";
+import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, { params }: PageParams) {
@@ -14,9 +15,16 @@ export async function GET(req: NextRequest, { params }: PageParams) {
   }
 }
 
-// export async function POST(request: NextRequest, { params }: PageParams) {
-//   console.log({ params });
-//   const formData = await request.formData();
-//   const amount = formData.get("amount");
-//   return NextResponse.json({ total: amount });
-// }
+export async function POST(request: NextRequest, { params }: PageParams) {
+  console.log({ params });
+  const accountDetails = await prisma.account.update({
+    where: {
+      id: params.id,
+    },
+    data: {
+      withDrawalAmount: 0,
+    },
+  });
+
+  return NextResponse.json({ ...accountDetails });
+}

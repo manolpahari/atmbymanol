@@ -15,7 +15,7 @@ async function Page({ params }: PageParams) {
         <Header name={account?.name} accountType={account?.accountType} />
         <Spacing h="6" />
         {/* Main Action */}
-        <MainAction />
+        <MainAction id={params?.id} />
         <Spacing h="6" />
         {/*Tabs*/}
         <TabsList params={params} />

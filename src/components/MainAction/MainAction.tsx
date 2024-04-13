@@ -2,8 +2,10 @@
 import React from "react";
 import Card from "../Card/Card";
 import { usePathname, useRouter } from "next/navigation";
+import { resetWithDrawAmount } from "@/app/db/queries/account";
 
-const MainAction = () => {
+const MainAction = ({ id }: { id: string }) => {
+  console.log({ id });
   const route = useRouter();
   const pathname = usePathname();
 
@@ -18,7 +20,10 @@ const MainAction = () => {
       {/* Enter Withdraw */}
       <Card
         title="Withdrawal"
-        onClick={() => route.push(`${pathname}/withdrawal`)}
+        onClick={async () => {
+          await resetWithDrawAmount(id);
+          return route.push(`${pathname}/withdrawal`);
+        }}
         buttonName="Cash Out"
       />
     </div>
