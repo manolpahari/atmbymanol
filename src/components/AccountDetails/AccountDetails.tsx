@@ -7,7 +7,9 @@ const AccountDetails = async ({ id }: { id: string }) => {
   const serialNum = 1;
   const dateCreated = accountData?.createdAT;
   const creditAmount =
-    accountData?.accountType === "credit" ? accountData?.amount : 0;
+    accountData?.accountType === "credit"
+      ? accountData?.amount
+      : accountData?.amount;
   return (
     <div className="overflow-x-auto">
       <table className="table table-xs">

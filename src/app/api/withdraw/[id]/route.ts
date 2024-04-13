@@ -1,5 +1,5 @@
 import { PageParams } from "@/app/dashboard/[id]/page";
-import { fetchAccountById, updateDeposit } from "@/app/db/queries/account";
+import { fetchAccountById, updateWithdrawal } from "@/app/db/queries/account";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, { params }: PageParams) {
@@ -19,11 +19,11 @@ export async function POST(request: NextRequest, { params }: PageParams) {
     console.log({ params });
     const formData = await request.formData();
     const amount = Number(formData.get("amount"));
-    const updatedAccountDetails = await updateDeposit({
+    const updatedAccountDetails = await updateWithdrawal({
       params,
-      depositAmount: amount,
+      withdrawalAmount: amount,
     });
-    return NextResponse.json({ updatedAccountDetails });
+    return NextResponse.json({ ...updatedAccountDetails });
   } catch (error) {
     if (error) console.log(error);
   }

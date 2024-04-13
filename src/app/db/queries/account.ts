@@ -64,11 +64,39 @@ export async function updateDeposit({
         amount: {
           increment: depositAmount,
         },
+        transType: "deposit",
+        depositAmount: {
+          increment: depositAmount,
+        },
+      },
+    });
+    return accountDetails;
+  }
+}
+
+export async function updateWithdrawal({
+  params,
+  withdrawalAmount,
+}: {
+  params: PageParams["params"];
+  withdrawalAmount: number;
+}) {
+  const account = await fetchAccountById(params.id);
+  if (account?.id) {
+    const accountDetails = await prisma.account.update({
+      where: {
+        id: params.id,
+      },
+      data: {
+        amount: {
+          decrement: withdrawalAmount,
+        },
         transCount: {
           increment: 1,
         },
-        depositAmount: {
-          increment: depositAmount,
+        transType: "withdraw",
+        withDrawalAmount: {
+          increment: withdrawalAmount,
         },
       },
     });

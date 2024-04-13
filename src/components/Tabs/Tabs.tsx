@@ -1,5 +1,5 @@
-'use client';
-import React, { useCallback, useState, useTransition } from 'react';
+"use client";
+import React, { useCallback, useState, useTransition } from "react";
 
 type TabsContainerProps = {
   tabName: string;
@@ -19,7 +19,7 @@ export const Tab = ({
   isActive,
   tabName,
   onClick,
-}: Omit<TabProps, 'order'>) => {
+}: Omit<TabProps, "order">) => {
   return (
     <>
       <input
@@ -68,9 +68,10 @@ export default function TabContainer({
             key={`${tabData.tabName} - ${index}`}
             isActive={tab.tabName === tabData.tabName}
             onClick={() => selectTab(tabData)}
-            children={tabData.children}
             tabName={tabData.tabName}
-          />
+          >
+            {tabData.children}
+          </Tab>
         );
       })}
     </div>

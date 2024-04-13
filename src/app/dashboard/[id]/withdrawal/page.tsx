@@ -2,9 +2,10 @@
 import ButtonPrimary from "@/components/Button/ButtonPrimary";
 import Spacing from "@/components/Spacing/Spacing";
 import { PageParams } from "../page";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getAccountData, isPassedOneDay } from "@/app/utils/appFunctions";
 import { Account } from "@prisma/client";
+import { access } from "fs";
 
 type ErrorType = {
   message: string;
@@ -12,35 +13,61 @@ type ErrorType = {
 };
 
 function Page({ params }: PageParams) {
-  const [amount, setAmount] = useState("0");
+  const [inputAmount, setInputAmount] = useState("0");
+  const [accountDetails, setAccountDetails] = useState<Account>();
+  // const [fetchDataCount, setFetchDataCount] = useState(0);
 
-  const handleDepositValidation = async (amount: number, id: string) => {
+  useEffect(() => {
+    const asyncFetchAccount = async () => {
+      const accountDetails = await getAccountData(`/api/withdraw/${params.id}`);
+      return setAccountDetails(accountDetails);
+    };
+    asyncFetchAccount();
+  }, [params.id]);
+
+  const handleWithdrawalValidation = async (
+    amount: number,
+    accountDetails: Account
+  ) => {
     let isValid = false;
-    const account = await getAccountData(`/api/deposit/${id}`);
-    const remainingBalance = amount + account?.amount;
 
-    const isMoreThanOneDay = await isPassedOneDay({ accountDetails: account });
+    const availableCreditLimit =
+      accountDetails?.creditLimit + accountDetails?.amount;
+    const hasReachedOutMaxCredit =
+      availableCreditLimit - amount < 0 ? true : false;
+    const availableBalance = accountDetails?.amount - amount;
+    // const transactionCount = accountDetails?.transCount;
 
-    //check if the deposit amount is more than daily limit(1000) when account type is not credit
-    if (account?.accountType !== "credit" && amount > 1000) {
+    console.log({ availableCreditLimit, hasReachedOutMaxCredit });
+
+    const isMoreThanOneDay = await isPassedOneDay({
+      accountDetails: accountDetails,
+    });
+
+    //check if the Withdrawal amount is more than daily limit(1000) when account type is not credit
+    if (accountDetails?.accountType == "credit" && hasReachedOutMaxCredit) {
       throw {
-        message: "Maximum deposit allowed in a day is $1000",
+        message: "Maximum credit limit reached",
         status: 422,
       };
-    } else if (account?.accountType === "credit" && remainingBalance > 0) {
-      //can't deposit more then negative credit balance
+    } else if (amount % 5 !== 0) {
       throw {
-        message: `You have ${account.amount} only on your credit balance`,
+        message: "Please enter the amount dispensable as $5 bills ",
         status: 422,
       };
-      //can only deposit upto $1000 in a day for savings and checking accounts
-    } else if (
-      account?.accountType !== "credit" &&
-      account?.depositAmount + amount > 1000 && //make sure the entered amount is not exceeding the target of $1000
-      !isMoreThanOneDay
-    ) {
+    } else if (amount > 200) {
       throw {
-        message: "You can only deposit upto 1000 a day",
+        message: "You can only withdraw $200 at this time",
+        status: 422,
+      };
+    } else if (availableBalance < 0) {
+      throw {
+        message: "Not Enough Balance",
+        status: 422,
+      };
+    } else if (!isMoreThanOneDay && accountDetails?.withDrawalAmount === 400) {
+      throw {
+        message: "You have reached the max withdraw limit for today",
         status: 422,
       };
     } else {
@@ -51,7 +78,7 @@ function Page({ params }: PageParams) {
 
   const handleShortcuts = useCallback((amount: number) => {
     if (amount) {
-      setAmount((prevAmount) => {
+      setInputAmount((prevAmount) => {
         const existingAmount = Number(prevAmount);
         const newAmount = existingAmount + amount;
         return newAmount.toString();
@@ -60,27 +87,29 @@ function Page({ params }: PageParams) {
     return;
   }, []);
 
-  const handleDeposit = async () => {
+  const handleWithdrawal = async (amount: number, accountDetails: Account) => {
     try {
-      if (amount && amount !== "0") {
+      if (inputAmount && inputAmount !== "0") {
         // clear the input
-        setAmount("");
+        setInputAmount("");
         let formData = new FormData();
-        formData.append("amount", amount);
+        formData.append("amount", inputAmount);
 
-        const isInputValid = await handleDepositValidation(
-          Number(amount),
-          params.id
+        const isInputValid = await handleWithdrawalValidation(
+          amount,
+          accountDetails
         );
         if (isInputValid) {
           // fetch post request
-          const req = await fetch(`/api/deposit/${params.id}`, {
+          const req = await fetch(`/api/withdraw/${params.id}`, {
             body: formData,
             method: "post",
           });
           const account: Account = await req.json();
           if (account?.id) {
-            //show a toast message
+            //  setAccount Details with latest update from post
+            return setAccountDetails(account);
+            // show a success message
           }
         }
       } else {
@@ -95,7 +124,7 @@ function Page({ params }: PageParams) {
   return (
     <section className="flex flex-col items-center ">
       <div className="max-w-5xl items-center justify-center">
-        <h1 className="text-2xl">Deposits</h1>
+        <h1 className="text-2xl">Withdrawals</h1>
         <span className="font-light">Choose from options below</span>
         <Spacing h="3" />
         {/* shortcuts buttons*/}
@@ -133,16 +162,18 @@ function Page({ params }: PageParams) {
               <input
                 className="text-md text-black bg-white p-2 rounded-md"
                 type="text"
-                name="depositAmount"
+                name="WithdrawalAmount"
                 placeholder="$0"
                 maxLength={10}
-                value={amount !== "0" ? amount : ""}
-                onChange={(e) => setAmount(e.currentTarget.value)}
+                value={inputAmount !== "0" ? inputAmount : ""}
+                onChange={(e) => setInputAmount(e.currentTarget.value)}
               />
               <ButtonPrimary
-                buttonName="Complete Deposit"
+                buttonName="Cash Out"
                 type="button"
-                onClick={handleDeposit}
+                onClick={() => {
+                  return handleWithdrawal(Number(inputAmount), accountDetails!);
+                }}
               />
             </form>
           </div>

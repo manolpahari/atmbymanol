@@ -24,6 +24,6 @@ model Account {
   updatedAT        DateTime @updatedAt
   depositAmount    Int      @default(0)
   withDrawalAmount Int      @default(0)
+  transCount       Int      @default(0)
   transType        String?
-  transCount       Int?
 }

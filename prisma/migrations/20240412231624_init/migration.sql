@@ -10,8 +10,8 @@ CREATE TABLE "Account" (
     "updatedAT" TIMESTAMP(3) NOT NULL,
     "depositAmount" INTEGER NOT NULL DEFAULT 0,
     "withDrawalAmount" INTEGER NOT NULL DEFAULT 0,
+    "transCount" INTEGER NOT NULL DEFAULT 0,
     "transType" TEXT,
-    "transCount" INTEGER,
 
     CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
 );

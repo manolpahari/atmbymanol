@@ -1,7 +1,7 @@
-'use client';
-import React from 'react';
-import Card from '../Card/Card';
-import { usePathname, useRouter } from 'next/navigation';
+"use client";
+import React from "react";
+import Card from "../Card/Card";
+import { usePathname, useRouter } from "next/navigation";
 
 const MainAction = () => {
   const route = useRouter();
