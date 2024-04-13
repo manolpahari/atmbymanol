@@ -11,7 +11,7 @@ import {
 import { Account } from "@prisma/client";
 import { Modal } from "@/components/Modal/Modal";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type ErrorType = {
   message: string;
@@ -21,8 +21,7 @@ type ErrorType = {
 function Page({ params }: PageParams) {
   const [inputAmount, setInputAmount] = useState("0");
   const [accountDetails, setAccountDetails] = useState<Account>();
-  const pathName = usePathname();
-  const goBackLink = generateGoBackLink(pathName);
+  const router = useRouter();
 
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
@@ -134,9 +133,17 @@ function Page({ params }: PageParams) {
 
   return (
     <>
-      <nav className="text-sm p-10 underline text-right">
-        <Link href={goBackLink}>{"<Go Back"}</Link>
-      </nav>
+      <div className="text-sm p-10 underline text-right">
+        <button
+          className="bg-transparent border-none underline cursor-pointer"
+          onClick={() => {
+            router.back();
+            router.refresh();
+          }}
+        >
+          Go back
+        </button>
+      </div>
       <section className="flex flex-col items-center ">
         <div className="max-w-5xl items-center justify-center">
           {/* Modal to display after success*/}

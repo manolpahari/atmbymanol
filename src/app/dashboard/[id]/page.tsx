@@ -13,7 +13,7 @@ async function Page({ params }: PageParams) {
   return (
     <>
       <nav className="text-sm p-10 underline text-right">
-        <Link href={"/"}>{"<Go Back"}</Link>
+        <Link href={"/"}>{"Go Back"}</Link>
       </nav>
       <section className="flex flex-col items-center justify-between md:mx-10 mx-4">
         <div className="max-w-5xl w-full items-center justify-between">

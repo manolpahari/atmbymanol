@@ -9,7 +9,7 @@ import {
   isPassedOneDay,
 } from "@/app/utils/appFunctions";
 import { Account } from "@prisma/client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Modal } from "@/components/Modal/Modal";
 
@@ -21,9 +21,7 @@ type ErrorType = {
 function Page({ params }: PageParams) {
   const [amount, setAmount] = useState("0");
   const modalRef = useRef<HTMLDialogElement | null>(null);
-  const pathName = usePathname();
-
-  const goBackLink = generateGoBackLink(pathName);
+  const router = useRouter();
 
   const handleOpenModal = useCallback(() => {
     if (modalRef.current) modalRef.current.showModal();
@@ -110,9 +108,17 @@ function Page({ params }: PageParams) {
 
   return (
     <>
-      <nav className="text-sm p-10 underline text-right">
-        <Link href={goBackLink}>{"<Go Back"}</Link>
-      </nav>
+      <div className="text-sm p-10 underline text-right">
+        <button
+          className="bg-transparent border-none underline cursor-pointer"
+          onClick={() => {
+            router.back();
+            router.refresh();
+          }}
+        >
+          Go back
+        </button>
+      </div>
       <section className="flex flex-col items-center ">
         <div className="max-w-5xl items-center justify-center">
           {/* Modal to display after success*/}
