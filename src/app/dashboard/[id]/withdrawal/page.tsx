@@ -2,9 +2,10 @@
 import ButtonPrimary from "@/components/Button/ButtonPrimary";
 import Spacing from "@/components/Spacing/Spacing";
 import { PageParams } from "../page";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getAccountData, isPassedOneDay } from "@/app/utils/appFunctions";
 import { Account } from "@prisma/client";
+import { Modal } from "@/components/Modal/Modal";
 
 type ErrorType = {
   message: string;
@@ -14,6 +15,7 @@ type ErrorType = {
 function Page({ params }: PageParams) {
   const [inputAmount, setInputAmount] = useState("0");
   const [accountDetails, setAccountDetails] = useState<Account>();
+  const modalRef = useRef<HTMLDialogElement | null>(null);
 
   useEffect(() => {
     const asyncFetchAccount = async () => {
@@ -22,6 +24,10 @@ function Page({ params }: PageParams) {
     };
     asyncFetchAccount();
   }, [params.id]);
+
+  const handleOpenModal = () => {
+    if (modalRef.current) modalRef.current.showModal();
+  };
 
   const handleWithdrawalValidation = async (
     amount: number,
@@ -34,8 +40,6 @@ function Page({ params }: PageParams) {
     const hasReachedOutMaxCredit =
       availableCreditLimit - amount < 0 ? true : false;
     const availableBalance = accountDetails?.amount - amount;
-
-    console.log({ availableCreditLimit, hasReachedOutMaxCredit });
 
     const isMoreThanOneDay = await isPassedOneDay({
       accountDetails: accountDetails,
@@ -105,8 +109,9 @@ function Page({ params }: PageParams) {
           const account: Account = await req.json();
           if (account?.id) {
             //  setAccount Details with latest update from post
-            return setAccountDetails(account);
+            setAccountDetails(account);
             // show a success message
+            return handleOpenModal();
           }
         }
       } else {
@@ -121,6 +126,12 @@ function Page({ params }: PageParams) {
   return (
     <section className="flex flex-col items-center ">
       <div className="max-w-5xl items-center justify-center">
+        <Modal
+          ref={modalRef}
+          modalTitle="Success!"
+          modalDescription="Please grab your cash from the tray"
+          buttonName="close"
+        />
         <h1 className="text-2xl">Withdrawals</h1>
         <span className="font-light">Choose from options below</span>
         <Spacing h="3" />
