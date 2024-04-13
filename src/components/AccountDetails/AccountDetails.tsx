@@ -1,15 +1,13 @@
-import { PageParams } from "@/app/dashboard/[id]/page";
 import { fetchAccountById } from "@/app/db/queries/account";
+import { appendDollarSign } from "@/app/utils/appFunctions";
 
 const AccountDetails = async ({ id }: { id: string }) => {
   const accountData = await fetchAccountById(id); //fetch from db
 
   const serialNum = 1;
   const dateCreated = accountData?.createdAT;
-  const creditAmount =
-    accountData?.accountType === "credit"
-      ? accountData?.amount
-      : accountData?.amount;
+  const balanceAmount = accountData?.amount.toString();
+  const creditAmount = appendDollarSign(accountData?.amount);
   return (
     <div className="overflow-x-auto">
       <table className="table table-xs">
@@ -24,7 +22,7 @@ const AccountDetails = async ({ id }: { id: string }) => {
           <tr>
             <th>{serialNum}</th>
             <td>{dateCreated?.toLocaleDateString()}</td>
-            <td>${creditAmount}</td>
+            <td>{creditAmount}</td>
           </tr>
         </tbody>
       </table>

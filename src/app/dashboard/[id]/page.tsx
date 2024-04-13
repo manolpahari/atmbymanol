@@ -10,7 +10,7 @@ export type PageParams = { params: { id: string } };
 async function Page({ params }: PageParams) {
   const account = await fetchAccountById(params?.id);
   return (
-    <section className="flex flex-col items-center justify-between">
+    <section className="flex flex-col items-center justify-between md:mx-10 mx-4">
       <div className="max-w-5xl w-full items-center justify-between">
         <Header name={account?.name} accountType={account?.accountType} />
         <Spacing h="6" />

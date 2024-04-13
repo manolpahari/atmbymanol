@@ -26,3 +26,14 @@ export async function isPassedOneDay({
   }
   return;
 }
+
+export const appendDollarSign = (amount: number | undefined) => {
+  if (amount) {
+    const isNegativeNum = Math.sign(amount) === -1;
+    const amountStr = amount.toString();
+    return isNegativeNum
+      ? amountStr?.replace("-", "-$")
+      : amountStr?.replace("", "$");
+  }
+  return;
+};

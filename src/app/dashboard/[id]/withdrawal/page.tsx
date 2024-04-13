@@ -5,7 +5,6 @@ import { PageParams } from "../page";
 import { useCallback, useEffect, useState } from "react";
 import { getAccountData, isPassedOneDay } from "@/app/utils/appFunctions";
 import { Account } from "@prisma/client";
-import { access } from "fs";
 
 type ErrorType = {
   message: string;
@@ -15,7 +14,6 @@ type ErrorType = {
 function Page({ params }: PageParams) {
   const [inputAmount, setInputAmount] = useState("0");
   const [accountDetails, setAccountDetails] = useState<Account>();
-  // const [fetchDataCount, setFetchDataCount] = useState(0);
 
   useEffect(() => {
     const asyncFetchAccount = async () => {
@@ -36,7 +34,6 @@ function Page({ params }: PageParams) {
     const hasReachedOutMaxCredit =
       availableCreditLimit - amount < 0 ? true : false;
     const availableBalance = accountDetails?.amount - amount;
-    // const transactionCount = accountDetails?.transCount;
 
     console.log({ availableCreditLimit, hasReachedOutMaxCredit });
 
