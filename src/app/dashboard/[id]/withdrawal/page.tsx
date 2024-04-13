@@ -133,7 +133,7 @@ function Page({ params }: PageParams) {
 
   return (
     <>
-      <div className="text-sm p-10 underline text-right">
+      <div className="text-sm p-10 underline text-center">
         <button
           className="bg-transparent border-none underline cursor-pointer"
           onClick={() => {
