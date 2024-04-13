@@ -16,14 +16,13 @@ export async function GET(req: NextRequest, { params }: PageParams) {
 
 export async function POST(request: NextRequest, { params }: PageParams) {
   try {
-    console.log({ params });
     const formData = await request.formData();
     const amount = Number(formData.get("amount"));
     const updatedAccountDetails = await updateDeposit({
       params,
       depositAmount: amount,
     });
-    return NextResponse.json({ updatedAccountDetails });
+    return NextResponse.json({ ...updatedAccountDetails });
   } catch (error) {
     if (error) console.log(error);
   }

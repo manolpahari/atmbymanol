@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { resetWithDrawAmount } from "@/app/db/queries/account";
 
 const MainAction = ({ id }: { id: string }) => {
-  console.log({ id });
   const route = useRouter();
   const pathname = usePathname();
 

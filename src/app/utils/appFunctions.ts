@@ -37,3 +37,16 @@ export const appendDollarSign = (amount: number | undefined) => {
   }
   return;
 };
+
+export const generateGoBackLink = (pathName: string) => {
+  let href = "";
+  const pathNames = pathName.split("/").filter((path) => path);
+  pathNames.pop();
+  if (pathNames.length > 1) {
+    href = pathNames.join("/").replace("", "/"); //replace method with empty target appends at the beginning of string
+  } else {
+    href = pathNames.toString().replace("", "/");
+  }
+
+  return href;
+};

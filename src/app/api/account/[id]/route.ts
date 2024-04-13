@@ -16,7 +16,6 @@ export async function GET(req: NextRequest, { params }: PageParams) {
 }
 
 export async function POST(request: NextRequest, { params }: PageParams) {
-  console.log({ params });
   const accountDetails = await prisma.account.update({
     where: {
       id: params.id,
