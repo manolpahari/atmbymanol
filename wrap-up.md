@@ -24,6 +24,7 @@ First off, I would like to refactor the code to make it more modular, Along with
   - Will add some more tables to also store transaction history and most likely allow the users to view their all transaction history.
   - Would be nice to have them resister a new account, with email, password/pin for more security. This way we could also allow them to login using their email and password/pin just in case they don't remember their account number.
   - Must be able to notify the user via text or email after each transactions they have completed(Important)
+  - Also add some unit testing and possibly playwright for E2E testing as well.
 
 ### If you have any other comments or info you'd like the reviewers to know, please add them below.
 
