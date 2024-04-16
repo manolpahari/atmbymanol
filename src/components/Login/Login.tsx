@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import ButtonPrimary from "../Button/ButtonPrimary";
 import { useRouter } from "next/navigation";
 import { Account } from "@prisma/client";
+import { LocalStorage } from "@/app/utils/appFunctions";
 
 const Login = () => {
   const accountNumberInputRef = useRef<HTMLInputElement | null>(null);
@@ -22,6 +23,8 @@ const Login = () => {
         );
       }
       //route the user to the dashboard
+      //set the local storage with isWithdrawAmtReset flag to true
+      LocalStorage.setLocalStorage("isWithdrawAmtReset", false);
 
       return router.push(`/dashboard/${account.id}`);
     } else {

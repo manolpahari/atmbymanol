@@ -3,8 +3,10 @@ import React from "react";
 import Card from "../Card/Card";
 import { usePathname, useRouter } from "next/navigation";
 import { resetWithDrawAmount } from "@/app/db/queries/account";
+import { LocalStorage, isPassedOneDay } from "@/app/utils/appFunctions";
+import { Account } from "@prisma/client";
 
-const MainAction = ({ id }: { id: string }) => {
+const MainAction = ({ id, account }: { id: string; account: Account }) => {
   const route = useRouter();
   const pathname = usePathname();
 
@@ -20,7 +22,15 @@ const MainAction = ({ id }: { id: string }) => {
       <Card
         title="Withdrawal"
         onClick={async () => {
-          await resetWithDrawAmount(id);
+          const isWithdrawAmtReset =
+            LocalStorage.getLocalStorage("isWithdrawAmtReset");
+          const isAnotherDay = await isPassedOneDay({
+            accountDetails: account,
+          });
+          if (!isWithdrawAmtReset || isAnotherDay)
+            await resetWithDrawAmount(id); //only reset the first time or if its passed one day
+          //set the withdraw rest counter to true, once it has been reset
+          LocalStorage.setLocalStorage("isWithdrawAmtReset", true);
           return route.push(`${pathname}/withdrawal`);
         }}
         buttonName="Cash Out"

@@ -50,3 +50,21 @@ export const generateGoBackLink = (pathName: string) => {
 
   return href;
 };
+
+export class LocalStorage {
+  static setLocalStorage(key: string, value: unknown): void {
+    return localStorage.setItem(key, JSON.stringify(value));
+  }
+  static getLocalStorage(key: string) {
+    const storedValue = localStorage.getItem(key);
+    if (storedValue) {
+      return JSON.parse(storedValue);
+    }
+  }
+  static removeLocalStorage(key: string): void {
+    return localStorage.removeItem(key);
+  }
+  static clearLocalStorage(): void {
+    return localStorage.clear();
+  }
+}

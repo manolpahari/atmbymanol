@@ -22,7 +22,7 @@ async function Page({ params }: PageParams) {
           <Header name={account?.name} accountType={account?.accountType} />
           <Spacing h="6" />
           {/* Main Action */}
-          <MainAction id={params?.id} />
+          <MainAction id={params?.id} account={account} />
           <Spacing h="6" />
           {/*Tabs*/}
           <TabsList params={params} />
