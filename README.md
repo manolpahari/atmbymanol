@@ -2,17 +2,14 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Install Docker Desktop(This is very important)
+- Cd into this repo main directory
+- Run npm install
+- Run the command docker compose up
+- Open another terminal from same path
+- Run npx prisma migrate dev --name init
+- Run npx prisma db seed
+- Run npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

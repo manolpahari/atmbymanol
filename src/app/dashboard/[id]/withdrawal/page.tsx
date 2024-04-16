@@ -4,8 +4,8 @@ import Spacing from "@/components/Spacing/Spacing";
 import { PageParams } from "../page";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  generateGoBackLink,
   getAccountData,
+  getAvailableBalance,
   isPassedOneDay,
 } from "@/app/utils/appFunctions";
 import { Account } from "@prisma/client";
@@ -47,7 +47,10 @@ function Page({ params }: PageParams) {
       accountDetails?.creditLimit + accountDetails?.amount;
     const hasReachedOutMaxCredit =
       availableCreditLimit - amount < 0 ? true : false;
-    const availableBalance = accountDetails?.amount - amount;
+    const availableBalance = getAvailableBalance({
+      accountInfo: accountDetails,
+      inputAmount: amount,
+    });
 
     const isMoreThanOneDay = await isPassedOneDay({
       accountDetails: accountDetails,

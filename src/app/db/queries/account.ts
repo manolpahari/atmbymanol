@@ -98,6 +98,9 @@ export async function updateWithdrawal({
         withDrawalAmount: {
           increment: withdrawalAmount,
         },
+        creditLimit: {
+          decrement: account.accountType === "credit" ? withdrawalAmount : 0,
+        },
       },
     });
     return accountDetails;

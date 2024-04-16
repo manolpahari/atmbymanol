@@ -23,7 +23,7 @@ const Login = () => {
         );
       }
       //route the user to the dashboard
-      //set the local storage with isWithdrawAmtReset flag to true
+      //set the local storage with isWithdrawAmtReset flag to false
       LocalStorage.setLocalStorage("isWithdrawAmtReset", false);
 
       return router.push(`/dashboard/${account.id}`);

@@ -68,3 +68,17 @@ export class LocalStorage {
     return localStorage.clear();
   }
 }
+
+export const getAvailableBalance = ({
+  accountInfo,
+  inputAmount,
+}: {
+  accountInfo: Account;
+  inputAmount: number;
+}) => {
+  if (accountInfo?.accountType === "credit") {
+    return accountInfo.creditLimit - inputAmount;
+  } else {
+    return accountInfo.amount - inputAmount;
+  }
+};

@@ -6,7 +6,13 @@ import { resetWithDrawAmount } from "@/app/db/queries/account";
 import { LocalStorage, isPassedOneDay } from "@/app/utils/appFunctions";
 import { Account } from "@prisma/client";
 
-const MainAction = ({ id, account }: { id: string; account: Account }) => {
+const MainAction = ({
+  id,
+  account,
+}: {
+  id: string;
+  account: Account | null;
+}) => {
   const route = useRouter();
   const pathname = usePathname();
 
@@ -25,7 +31,7 @@ const MainAction = ({ id, account }: { id: string; account: Account }) => {
           const isWithdrawAmtReset =
             LocalStorage.getLocalStorage("isWithdrawAmtReset");
           const isAnotherDay = await isPassedOneDay({
-            accountDetails: account,
+            accountDetails: account!,
           });
           if (!isWithdrawAmtReset || isAnotherDay)
             await resetWithDrawAmount(id); //only reset the first time or if its passed one day

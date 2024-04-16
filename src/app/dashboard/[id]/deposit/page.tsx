@@ -9,8 +9,7 @@ import {
   isPassedOneDay,
 } from "@/app/utils/appFunctions";
 import { Account } from "@prisma/client";
-import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Modal } from "@/components/Modal/Modal";
 
 type ErrorType = {
