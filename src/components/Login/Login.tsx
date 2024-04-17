@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import ButtonPrimary from "../Button/ButtonPrimary";
 import { useRouter } from "next/navigation";
 import { Account } from "@prisma/client";
-import { LocalStorage } from "@/app/utils/appFunctions";
+import { LocalStorage, isPassedOneDay } from "@/app/utils/appFunctions";
 
 const Login = () => {
   const accountNumberInputRef = useRef<HTMLInputElement | null>(null);
@@ -14,6 +14,7 @@ const Login = () => {
 
   const handleButtonClick = async () => {
     const accountNumber = accountNumberInputRef?.current?.value;
+    const resetCount = Number(LocalStorage.getLocalStorage("resetCount"));
     if (accountNumber) {
       const request = await fetch(`/api/account/${accountNumber}`);
       const account: Account = await request.json();
@@ -24,7 +25,17 @@ const Login = () => {
       }
       //route the user to the dashboard
       //set the local storage with isWithdrawAmtReset flag to false
-      LocalStorage.setLocalStorage("isWithdrawAmtReset", false);
+      const isMoreThanOneDay = await isPassedOneDay({
+        accountDetails: account,
+      });
+      if (!isMoreThanOneDay && !resetCount) {
+        LocalStorage.setLocalStorage("isWithdrawAmtReset", false);
+        // increment the resetCount by one, everyTime there is a reset
+        LocalStorage.setLocalStorage(
+          "resetCount",
+          resetCount ? resetCount + 1 : 1
+        );
+      }
 
       return router.push(`/dashboard/${account.id}`);
     } else {
