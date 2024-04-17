@@ -2,9 +2,9 @@
 import React from "react";
 import Card from "../Card/Card";
 import { usePathname, useRouter } from "next/navigation";
-import { resetWithDrawAmount } from "@/app/db/queries/account";
 import { LocalStorage, isPassedOneDay } from "@/app/utils/appFunctions";
 import { Account } from "@prisma/client";
+import { resetAmount } from "@/app/db/queries/account";
 
 const MainAction = ({
   id,
@@ -21,7 +21,18 @@ const MainAction = ({
       {/* Enter Deposit */}
       <Card
         title="Deposit"
-        onClick={() => route.push(`${pathname}/deposit`)}
+        onClick={async () => {
+          const isDepositAmtReset =
+            LocalStorage.getLocalStorage("isDepositAmtReset");
+          const isAnotherDay = await isPassedOneDay({
+            accountDetails: account!,
+          });
+          if (!isDepositAmtReset || isAnotherDay)
+            await resetAmount(id, "deposit"); //only reset the first time or if its passed one day
+          //set the withdraw rest counter to true, once it has been reset
+          LocalStorage.setLocalStorage("isDepositAmtReset", true);
+          return route.push(`${pathname}/deposit`);
+        }}
         buttonName="Cash In"
       />
       {/* Enter Withdraw */}
@@ -34,7 +45,7 @@ const MainAction = ({
             accountDetails: account!,
           });
           if (!isWithdrawAmtReset || isAnotherDay)
-            await resetWithDrawAmount(id); //only reset the first time or if its passed one day
+            await resetAmount(id, "withdraw"); //only reset the first time or if its passed one day
           //set the withdraw rest counter to true, once it has been reset
           LocalStorage.setLocalStorage("isWithdrawAmtReset", true);
           return route.push(`${pathname}/withdrawal`);

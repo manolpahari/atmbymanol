@@ -29,7 +29,10 @@ const Login = () => {
         accountDetails: account,
       });
       if (!isMoreThanOneDay && !resetCount) {
+        //set isWithdrawAmtReset flag to false
         LocalStorage.setLocalStorage("isWithdrawAmtReset", false);
+        //set isDepositAmtReset flag to false
+        LocalStorage.setLocalStorage("isDepositAmtReset", false);
         // increment the resetCount by one, everyTime there is a reset
         LocalStorage.setLocalStorage(
           "resetCount",

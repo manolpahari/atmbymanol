@@ -16,14 +16,30 @@ export async function GET(req: NextRequest, { params }: PageParams) {
 }
 
 export async function POST(request: NextRequest, { params }: PageParams) {
-  const accountDetails = await prisma.account.update({
-    where: {
-      id: params.id,
-    },
-    data: {
-      withDrawalAmount: 0,
-    },
-  });
-
+  const body = await request.json();
+  console.log({ body });
+  const type = body?.type;
+  let accountDetails;
+  if (type === "deposit") {
+    accountDetails = await prisma.account.update({
+      where: {
+        id: params.id,
+      },
+      data: {
+        depositAmount: 0,
+      },
+    });
+  } else if (type === "withdraw") {
+    accountDetails = await prisma.account.update({
+      where: {
+        id: params.id,
+      },
+      data: {
+        withDrawalAmount: 0,
+      },
+    });
+  } else {
+    accountDetails = {};
+  }
   return NextResponse.json({ ...accountDetails });
 }

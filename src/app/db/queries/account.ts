@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation"; // Importing the notFound function from Next.js for handling 404 errors.
 import { PageParams } from "@/app/dashboard/[id]/page";
 
+type DepositType = "deposit" | "withdraw";
+
 export async function fetchAccounts(): Promise<Account[]> {
   // Function to fetch all accounts from the database.
   return await prisma.account.findMany({
@@ -107,13 +109,14 @@ export async function updateWithdrawal({
   }
 }
 
-export const resetWithDrawAmount = async (id: string) => {
+export const resetAmount = async (id: string, type: DepositType) => {
   try {
     const req = await fetch(`/api/account/${id}`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ type: type }),
     });
     const account: Account = await req.json();
     if (account?.id) {
