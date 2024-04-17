@@ -10,6 +10,9 @@
 - Run npx prisma migrate dev --name init
 - Run npx prisma db seed
 - Run npm run dev
+- Please use any of the account no that could be found inside seed.ts file, for testing
+
+- recommend using Postico as a GUI Postgres tool, which can be found here [text](https://eggerapps.at/postico2/)
 
 ### Were there any pieces of this project that you were not able to complete that you'd like to mention?
 
